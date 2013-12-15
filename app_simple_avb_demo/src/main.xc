@@ -111,6 +111,11 @@ void audio_hardware_setup(void)
 #if AVB_XA_SK_AUDIO_PLL_SLICE
   audio_codec_CS4270_init(p_audio_shared, 0xff, 0x48, r_i2c);
   audio_codec_CS4270_init(p_audio_shared, 0xff, 0x49, r_i2c);
+#elif USE_CODEC_WM8731
+  //params are: out port p_codec_reset, int mask, int codec_addr, struct r_i2c &r_i2c
+  // changed codec address to the address of WM8731 (0x1a)
+  // mask does not seem to be used
+  audio_codec_WM8731_init(p_audio_shared, 0xff, 0x1a, r_i2c);
 #endif
 }
 
