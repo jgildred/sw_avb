@@ -10,8 +10,7 @@
 #include "avb_conf.h"
 #include "i2c.h"
 
-void audio_codec_WM8731_init(out port p_codec_reset,
-                              int mask,
+void audio_codec_WM8731_init(int mask,
                               int codec_addr,
                         #if I2C_COMBINE_SCL_SDA
                               port r_i2c

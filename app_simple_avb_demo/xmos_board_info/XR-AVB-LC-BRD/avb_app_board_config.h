@@ -2,7 +2,7 @@
 // All the port defines for this board are set in the target description
 // XN file so there is not much to do here
 
-#define ENABLE_XSCOPE           1
+#define ENABLE_XSCOPE           0
 
 #define USING_XMOS_DEV_BOARD    1
 #define PORT_SDATA_IN           {PORT_SDATA_IN0, PORT_SDATA_IN1, PORT_SDATA_IN2, PORT_SDATA_IN3 }

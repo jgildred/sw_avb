@@ -9,6 +9,7 @@
 #include <xclib.h>
 #include <stdlib.h>
 #include <print.h>
+#include "simple_printf.h"
 #include "audio_codec_WM8731.h"
 #include "print.h"
 #include "i2c.h"
@@ -26,24 +27,26 @@
 #define R9  0x12
 #define R15 0x1e
 
+#define COMMANDS 11
+
 // This will be the order of the command set
-static unsigned char regaddr[11] = {
-		R6, // Power down control
-		R7, // Digital audio interface format
-		R0, // Left line in
-		R1, // Right line in
-		R2, // Left headphone out
-		R3, // Right headphone out
-		R5, // Digital audio path control
-		R4, // Analog audio path control
-		R8, // Sampling control
-		R6, // Power down control
-		R9  // Active control
+static unsigned char regaddr[COMMANDS] = {
+		R6, // 0x0c Power down control
+		R7, // 0x0e Digital audio interface format
+		R0, // 0x00 Left line in
+		R1, // 0x02 Right line in
+		R2, // 0x04 Left headphone out
+		R3, // 0x06 Right headphone out
+		R5, // 0x0a Digital audio path control
+		R4, // 0x08 Analog audio path control
+		R8, // 0x10 Sampling control
+		R6, // 0x0c Power down control
+		R9  // 0x12 Active control
 };
 
 // This needs to be updated with correct data values for each command
 // See the register descriptions in the data sheet of WM8731
-static unsigned char regdata[11] = {
+static unsigned char regdata[COMMANDS] = {
 		0x00, // 00000000  turn everything on; not sure if needed
 		0x0a, // 00001010  use i2s, 24bit, slave mode
 		0x17, // 00010111  vol set to 23
@@ -51,14 +54,13 @@ static unsigned char regdata[11] = {
 		0x79, // 01111001  vol set to 121
 		0x79, // 01111001  vol set to 121
 		0x08, // 00001000  DAC soft mute control
-		0x10, // 00010000  select DAC
-		0x40, // 01000000  48kHz sample rate, div clock by 2
-		0x61, // 01100001  OSC, LININ, CLKOUT power down
-		0x01  // 00000001  enable codec
+		0x1c, // 00011100  mic input, turn on bypass, select DAC *
+		0x40, // 01000000  48kHz sample rate, div clock by 2 *
+		0x61, // 01100001  OSC, LININ, CLKOUT power down *
+		0x01  // 00000001  enable codec *
 };
 
-void audio_codec_WM8731_init(out port p_codec_reset,
-                              int mask,
+void audio_codec_WM8731_init(int mask,
                               int codec_addr,
                               struct r_i2c &r_i2c)
 {
@@ -71,9 +73,10 @@ void audio_codec_WM8731_init(out port p_codec_reset,
   tmr when timerafter(time) :> int _;
 
   #pragma unsafe arrays
-  for(int i = 0; i < 8; i++) {
+  for(int i = 0; i < COMMANDS; i++) {
     data[0] = regdata[i];
     // Here's the magic
     i2c_master_write_reg(codec_addr, regaddr[i], data, 1, r_i2c);
+    //simple_printf("Sending command to WM8731.\n");
   }
 }

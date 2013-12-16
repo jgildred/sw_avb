@@ -18,6 +18,8 @@
 #define PLL_TYPE_CS2300         1
 #define PLL_AUX_OUTPUT_IS_MCLK  1
 
+#define USE_CODEC_WM8731        1
+
 #define I2C_COMBINE_SCL_SDA     0
 
 #define AVB_GPIO_ENABLED        1

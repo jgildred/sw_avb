@@ -9,8 +9,9 @@
 #include "i2c.h"
 #include "avb.h"
 #include "audio_clock_CS2300CP.h"
-#include "audio_clock_CS2100CP.h"
-#include "audio_codec_CS4270.h"
+//#include "audio_clock_CS2100CP.h"
+//#include "audio_codec_CS4270.h"
+#include "audio_codec_WM8731.h"
 #include "simple_printf.h"
 #include "media_fifo.h"
 #include "ethernet_board_support.h"
@@ -115,7 +116,7 @@ void audio_hardware_setup(void)
   //params are: out port p_codec_reset, int mask, int codec_addr, struct r_i2c &r_i2c
   // changed codec address to the address of WM8731 (0x1a)
   // mask does not seem to be used
-  audio_codec_WM8731_init(p_audio_shared, 0xff, 0x1a, r_i2c);
+  audio_codec_WM8731_init(0xff, 0x1a, r_i2c);
 #endif
 }
 
